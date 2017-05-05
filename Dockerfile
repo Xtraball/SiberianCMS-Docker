@@ -13,4 +13,7 @@ RUN yum -y install git
 
 RUN git clone https://github.com/Xtraball/SiberianCMS.git /var/www/siberian
 
-EXPOSE 22 80 443 35000-35500
+COPY assets/wrapper /usr/local/bin/wrapper
+RUN chmod +x /usr/local/bin/wrapper
+
+EXPOSE 22 80 443 35500-36000

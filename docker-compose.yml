@@ -7,8 +7,8 @@ services:
     volumes:
       - '/home/siberian/docker/mysql:/usr/local/var/mysql:Z'
     environment:
-      - DB_USER=siberian
-      - DB_PASS=changeme
+      - DB_USER=$DB_USER
+      - DB_PASS=$DB_PASS
       - DB_NAME=siberian-docker
   #postfix mail server https://github.com/catatnight/docker-postfix
   siberian:
@@ -24,8 +24,8 @@ services:
     hostname: 'siberian-docker'
     restart: always
     environment:
-      - DB_USER=siberian
-      - DB_PASS=changeme
+      - DB_USER=$DB_USER
+      - DB_PASS=$DB_PASS
       - DB_NAME=siberian-docker
       - MARIADB_HOST=mariadb
       - MARIADB_PORT=3306
@@ -33,7 +33,7 @@ services:
       - '2022:22'
       - '80'
       - '443'
-      - '35000-35500'
+      - '35500-36000'
     volumes:
       - '/run'
       - '/tmp'
