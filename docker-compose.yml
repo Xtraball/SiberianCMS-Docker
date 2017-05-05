@@ -1,0 +1,42 @@
+version: '2'
+
+services:
+  mariadb:
+    restart: always
+    image: mariadb:latest
+    volumes:
+      - '/home/siberian/docker/mysql:/usr/local/var/mysql:Z'
+    environment:
+      - DB_USER=siberian
+      - DB_PASS=changeme
+      - DB_NAME=siberian-docker
+  #postfix mail server https://github.com/catatnight/docker-postfix
+  siberian:
+    entrypoint: '/usr/local/bin/wrapper'
+    depends_on:
+      - mariadb
+    privileged: true
+    image: 'siberian/docker_centos_7'
+    build:
+      context: .
+      dockerfile: 'Dockerfile'
+    container_name: 'siberian_docker'
+    hostname: 'siberian-docker'
+    restart: always
+    environment:
+      - DB_USER=siberian
+      - DB_PASS=changeme
+      - DB_NAME=siberian-docker
+      - MARIADB_HOST=mariadb
+      - MARIADB_PORT=3306
+    ports:
+      - '2022:22'
+      - '80'
+      - '443'
+      - '35000-35500'
+    volumes:
+      - '/run'
+      - '/tmp'
+      - '/home/siberian/docker/siberian:/var/www/siberian'
+      - '/home/siberian/docker/etc/nginx:/etc/nginx'
+
