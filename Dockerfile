@@ -7,6 +7,8 @@ RUN yum install -y openssh openssh-server
 RUN yum install -y nginx
 RUN yum install -y php-fpm php-cli php-common php-devel php-gd php-magickwand php-mbstring php-mcrypt \
     php-mysql php-pdo php-xml php-mongodb
+RUN yum install -y zip unzip
+RUN yum install -y curl wget
 RUN yum install -y composer.noarch
 RUN yum install -y optipng jpegoptim pngquant
 RUN yum -y install git
