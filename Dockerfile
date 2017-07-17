@@ -3,17 +3,12 @@ FROM centos:7
 MAINTAINER dev@xtraball.com
 
 RUN yum update
-RUN yum install -y openssh openssh-server
-RUN yum install -y nginx
-RUN yum install -y php-fpm php-cli php-common php-devel php-gd php-magickwand php-mbstring php-mcrypt \
-    php-mysql php-pdo php-xml php-mongodb
-RUN yum install -y zip unzip
-RUN yum install -y curl wget
-RUN yum install -y composer.noarch
-RUN yum install -y optipng jpegoptim pngquant
-RUN yum -y install git
-
-RUN git clone https://github.com/Xtraball/SiberianCMS.git /var/www/siberian
+RUN yum install -y openssh openssh-server \
+    nginx php-fpm php-cli php-common php-devel \
+    php-gd php-magickwand php-mbstring \
+    php-mcrypt php-mysql php-pdo php-xml \
+    php-mongodb zip unzip curl wget composer.noarch \
+    optipng jpegoptim pngquant git
 
 COPY assets/wrapper /usr/local/bin/wrapper
 RUN chmod +x /usr/local/bin/wrapper

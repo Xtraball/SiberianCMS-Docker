@@ -1,42 +1,40 @@
-version: '2'
+version: '3'
 
 services:
   mariadb:
     restart: always
     image: mariadb:latest
     volumes:
-      - '/home/siberian/docker/mysql:/usr/local/var/mysql:Z'
+      - ../mysql:/usr/local/var/mysql:Z
     environment:
-      - DB_USER=$DB_USER
-      - DB_PASS=$DB_PASS
-      - DB_NAME=siberian-docker
-  #postfix mail server https://github.com/catatnight/docker-postfix
-  siberian:
-    entrypoint: '/usr/local/bin/wrapper'
-    depends_on:
-      - mariadb
-    privileged: true
-    image: 'siberian/docker_centos_7'
-    build:
-      context: .
-      dockerfile: 'Dockerfile'
-    container_name: 'siberian_docker'
-    hostname: 'siberian-docker'
-    restart: always
-    environment:
-      - DB_USER=$DB_USER
-      - DB_PASS=$DB_PASS
-      - DB_NAME=siberian-docker
-      - MARIADB_HOST=mariadb
-      - MARIADB_PORT=3306
-    ports:
-      - '2022:22'
-      - '80'
-      - '443'
-      - '35500-36000'
-    volumes:
-      - '/run'
-      - '/tmp'
-      - '/home/siberian/docker/siberian:/var/www/siberian'
-      - '/home/siberian/docker/etc/nginx:/etc/nginx'
+      - MYSQL_ROOT_PASSWORD=changeme
+    networks:
+      - xtraball-bridge
 
+  php-fpm:
+    image: php:7.1-fpm
+    volumes:
+      - ../siberian:/var/www/html
+    links:
+      - mariadb
+    ports:
+      - 9000
+    networks:
+      - xtraball-bridge
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - 80
+      - 35500-36000
+    volumes:
+      - ../siberian:/var/www/html
+      - ../assets/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    links:
+      - php-fpm
+    networks:
+      - siberian-bridge
+
+networks:
+  siberian-bridge:
+    driver: bridge
