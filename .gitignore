@@ -3,3 +3,4 @@
 mysql/*
 siberian/*
 docker-compose.yml
+etc/ssl/*
