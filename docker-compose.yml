@@ -7,8 +7,6 @@ services:
     build:
       context: .
       dockerfile: ./dockerfiles/mariadb/Dockerfile
-    stdin_open: true
-    tty: true
     volumes:
       - ./mysql:/var/lib/mysql
     environment:
@@ -22,8 +20,6 @@ services:
     build:
       context: .
       dockerfile: ./dockerfiles/php-fpm/Dockerfile
-    stdin_open: true
-    tty: true
     volumes:
       - ./siberian:/var/www/html
     links:
