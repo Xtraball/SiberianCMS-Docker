@@ -20,6 +20,7 @@ services:
     build:
       context: .
       dockerfile: ./dockerfiles/php-fpm/Dockerfile
+    tty: true
     volumes:
       - ./siberian:/var/www/html
     ports:
