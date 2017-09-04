@@ -3,33 +3,34 @@ version: '3'
 services:
   mariadb:
     restart: always
-    image: mariadb:latest
+    image: mariadb:10.2
     volumes:
-      - ../mysql:/usr/local/var/mysql:Z
+      - ./mysql:/usr/local/var/mysql:Z
     environment:
       - MYSQL_ROOT_PASSWORD=changeme
     networks:
-      - xtraball-bridge
+      - siberian-bridge
 
   php-fpm:
     image: php:7.1-fpm
     volumes:
-      - ../siberian:/var/www/html
+      - ./siberian:/var/www/html
+      - ./etc/ssl:/etc/nginx/ssl-certificates
     links:
       - mariadb
     ports:
       - 9000
     networks:
-      - xtraball-bridge
+      - siberian-bridge
 
   nginx:
     image: nginx:latest
     ports:
-      - 80
+      - 80:20080
       - 35500-36000
     volumes:
-      - ../siberian:/var/www/html
-      - ../assets/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./siberian:/var/www/html
+      - ./assets/nginx/default.conf:/etc/nginx/conf.d/default.conf
     links:
       - php-fpm
     networks:
