@@ -14,9 +14,14 @@ openssl req -new -key ./etc/ssl/default.key -out ./etc/ssl/default.csr \
 openssl x509 -req -days 365 -in ./etc/ssl/default.csr -signkey ./etc/ssl/default.key -out ./etc/ssl/default.crt
 
 # Generates a Random MySQL Password
-password=`head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13`
+if [ -s ./mysql.password ]
+then
+    password=`head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13`
+    echo $password > mysql.password
+else
+    password=`cat ./mysql.password`
+fi
 sed -i'' s/MYSQL_ROOT_PASSWORD=changeme/MYSQL_ROOT_PASSWORD=$password/g ./docker-compose.yml
 
-echo $password > mysql.password
-echo 'You can find your MySQL root password in the following file mysql.password'
+echo 'You can find your MySQL root password in the following file `mysql.password`'
 echo 'MySQL Password: '$password
