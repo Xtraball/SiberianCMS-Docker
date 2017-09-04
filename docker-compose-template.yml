@@ -22,6 +22,8 @@ services:
       dockerfile: ./dockerfiles/php-fpm/Dockerfile
     volumes:
       - ./siberian:/var/www/html
+    ports:
+      - 35500-35505
     links:
       - mariadb
     networks:

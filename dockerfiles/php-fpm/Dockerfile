@@ -12,7 +12,7 @@ RUN apt-get install -y \
     zip unzip \
     vim \
     php-fpm php-mysql php-cli php-common php-gd php-mcrypt \
-    php-pdo php-xml php-mongodb \
+    php-pdo php-xml php-mongodb php-curl php-sqlite3 \
     net-tools \
     openjdk-8-jdk openjdk-8-jre \
     cron
