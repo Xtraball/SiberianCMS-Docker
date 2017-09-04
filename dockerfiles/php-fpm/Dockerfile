@@ -16,7 +16,7 @@ RUN apt-get install -y \
     net-tools
 
 RUN rm -f /etc/php/7.0/fpm/pool.d/www.conf
-COPY ./dockerfiles/php-fpm/docker.conf /etc/php/7.0/fpm/pool.d/
+COPY ./assets/php-fpm/docker.conf /etc/php/7.0/fpm/pool.d/
 
 WORKDIR /var/www/html
 

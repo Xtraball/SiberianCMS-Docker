@@ -6,6 +6,7 @@ services:
     image: mariadb:10.2
     volumes:
       - ./mysql:/usr/local/var/mysql:Z
+      - ./assets/mysql/my.cnf:/var/mysql/my.cnf
     environment:
       - MYSQL_ROOT_PASSWORD=changeme
     networks:
