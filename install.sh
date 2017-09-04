@@ -2,6 +2,8 @@
 
 # Copy docker-compose.yml
 cp -f docker-compose-template.yml docker-compose.yml
+mkdir ./etc/ssl
+chmod 777 ./etc/ssl
 
 # Generates a temporary SSL certificate
 openssl genrsa -des3 -passout pass:x -out ./etc/ssl/default.pass.key 2048
