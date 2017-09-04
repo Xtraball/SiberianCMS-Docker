@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Copy docker-compose.yml
+cp -f docker-compose-template.yml docker-compose.yml
+
 # Generates a temporary SSL certificate
 openssl genrsa -des3 -passout pass:x -out ./etc/ssl/default.pass.key 2048
 openssl rsa -passin pass:x -in ./etc/ssl/default.pass.key -out ./etc/ssl/default.key
