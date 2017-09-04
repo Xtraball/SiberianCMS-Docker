@@ -6,16 +6,13 @@ RUN rm -f /etc/apt/sources.list
 COPY ./dockerfiles/php-fpm/sources.list /etc/apt/sources.list
 
 RUN apt-get update
-RUN apt-get install -y \
-    optipng jpegoptim pngquant \
-    curl wget \
-    zip unzip \
-    vim \
-    php-fpm php-mysql php-cli php-common php-gd php-mcrypt \
-    php-pdo php-xml php-mongodb php-curl php-sqlite3 \
-    net-tools \
-    openjdk-8-jdk openjdk-8-jre \
-    cron
+RUN apt-get install -y optipng jpegoptim pngquant
+RUN apt-get install -y curl wget
+RUN apt-get install -y zip unzip vim
+RUN apt-get install -y php-fpm php-mysql php-cli php-common php-gd php-mcrypt php-pdo php-xml php-mongodb php-curl php-sqlite3
+RUN apt-get install -y net-tools
+RUN apt-get install -y openjdk-8-jdk openjdk-8-jre
+RUN apt-get install -y cron
 
 RUN rm -f /etc/php/7.0/fpm/pool.d/www.conf
 COPY ./assets/php-fpm/docker.conf /etc/php/7.0/fpm/pool.d/
