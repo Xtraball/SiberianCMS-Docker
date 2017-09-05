@@ -24,7 +24,7 @@ services:
     volumes:
       - ./siberian:/var/www/html
     ports:
-      - SOCKETIO_RANGE
+      - SOCKETIO_RANGE:SOCKETIO_RANGE
     links:
       - mariadb
     networks:
