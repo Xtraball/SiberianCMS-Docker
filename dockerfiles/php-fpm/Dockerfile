@@ -13,9 +13,13 @@ RUN apt-get install -y php-fpm php-mysql php-cli php-common php-gd php-mcrypt ph
 RUN apt-get install -y net-tools
 RUN apt-get install -y openjdk-8-jdk openjdk-8-jre
 RUN apt-get install -y cron
+RUN apt-get install -y lib32z1 lib32z1-dev
+RUN apt-get install -y nodejs
 
 RUN rm -f /etc/php/7.0/fpm/pool.d/www.conf
 COPY ./assets/php-fpm/docker.conf /etc/php/7.0/fpm/pool.d/
+RUN rm -f /etc/php/7.0/fpm/php.ini
+COPY ./assets/php-fpm/php.ini /etc/php/7.0/fpm/php.ini
 
 # Install the default Siberian CRON Scheduler
 RUN (crontab -l ; echo "* * * * * /usr/bin/php -d memory_limit=512M -f /var/www/html/cron.php >> /var/www/html/var/log/cron.log 2>&1") | crontab
@@ -25,5 +29,6 @@ WORKDIR /var/www/html
 EXPOSE 9000
 
 RUN service php7.0-fpm start
+RUN service cron start
 
-CMD cron && php-fpm7.0 -F
+CMD php-fpm7.0 -F
