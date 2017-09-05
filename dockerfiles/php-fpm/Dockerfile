@@ -29,6 +29,6 @@ WORKDIR /var/www/html
 EXPOSE 9000
 
 RUN service php7.0-fpm start
-RUN service cron start
+RUN cron -f
 
 CMD php-fpm7.0 -F

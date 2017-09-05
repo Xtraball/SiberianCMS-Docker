@@ -6,7 +6,7 @@ mkdir -p ./etc/ssl
 chmod -R 777 ./etc/ssl
 
 # Generates a temporary SSL certificate
-openssl genrsa -des3 -passout pass:x -out ./etc/ssl/default.pass.key 2048
+openssl genpkey -algorithm RSA -out ./etc/ssl/default.pass.key -pass pass:x -pkeyopt rsa_keygen_bits:2048 -pkeyopt rsa_keygen_pubexp:3
 openssl rsa -passin pass:x -in ./etc/ssl/default.pass.key -out ./etc/ssl/default.key
 rm ./etc/ssl/default.pass.key
 openssl req -new -key ./etc/ssl/default.key -out ./etc/ssl/default.csr \
@@ -14,12 +14,12 @@ openssl req -new -key ./etc/ssl/default.key -out ./etc/ssl/default.csr \
 openssl x509 -req -days 365 -in ./etc/ssl/default.csr -signkey ./etc/ssl/default.key -out ./etc/ssl/default.crt
 
 # Generates a Random MySQL Password
-if [ -s ./mysql.password ]
+if [[ -f "./mysql.password" && -s "./mysql.password" ]]
 then
+    password=`cat ./mysql.password`
+else
     password=`head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13`
     echo $password > mysql.password
-else
-    password=`cat ./mysql.password`
 fi
 sed -i'' s/MYSQL_ROOT_PASSWORD=changeme/MYSQL_ROOT_PASSWORD=$password/g ./docker-compose.yml
 
