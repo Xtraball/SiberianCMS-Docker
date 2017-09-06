@@ -50,25 +50,19 @@ then
     # Generates a Random MySQL Password
     if [[ -f "./mysql.password" && -s "./mysql.password" ]]
     then
-        password=`cat ./mysql.password`
+        MYSQL_PASSWORD=`cat ./mysql.password`
     else
-        password=`openssl rand -base64 16 | head -c 13`
-        echo $password > mysql.password
+        MYSQL_PASSWORD=`openssl rand -hex 13`
+        echo $MYSQL_PASSWORD > mysql.password
     fi
 
-    # Special OSX case
-    if [ `uname -s` == "Darwin" ]
-    then
-        SED_CLI="sed -i ''"
-    else
-        SED_CLI="sed -i''"
-    fi
+    sed -e s/MYSQL_ROOT_PASSWORD=changeme/MYSQL_ROOT_PASSWORD=$MYSQL_PASSWORD/g \
+        -e s/HTTP_PORT/$HTTP_PORT/g \
+        -e s/HTTPS_PORT/$HTTPS_PORT/g \
+        -e s/SOCKETIO_RANGE/$SOCKETIO_RANGE/g \
+        ./docker-compose-template.yml > docker-compose.yml
 
-    $SED_CLI s/MYSQL_ROOT_PASSWORD=changeme/MYSQL_ROOT_PASSWORD=$password/g ./docker-compose.yml
-    $SED_CLI s/HTTP_PORT/$HTTP_PORT/g ./docker-compose.yml
-    $SED_CLI s/HTTPS_PORT/$HTTPS_PORT/g ./docker-compose.yml
-    $SED_CLI s/SOCKETIO_RANGE/$SOCKETIO_RANGE/g ./docker-compose.yml
 fi
 
 echo 'You can find your MySQL root password in the following file `mysql.password`'
-echo 'MySQL Password: '$password
+echo 'MySQL Password: '$MYSQL_PASSWORD
