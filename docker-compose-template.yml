@@ -1,19 +1,6 @@
 version: '3'
 
 services:
-  mariadb:
-    restart: always
-    image: siberian_mariadb-10.2
-    build:
-      context: .
-      dockerfile: ./dockerfiles/mariadb/Dockerfile
-    volumes:
-      - ./mysql:/var/lib/mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=changeme
-    networks:
-      - siberian-bridge
-
   apache2:
     restart: always
     image: romeoz/docker-apache-php:5.6
@@ -21,8 +8,6 @@ services:
       - HTTP_PORT:80
     volumes:
       - ./siberian:/var/www/app
-    links:
-      - mariadb
     networks:
       - siberian-bridge
 
