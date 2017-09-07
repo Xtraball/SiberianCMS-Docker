@@ -15,6 +15,10 @@ RUN apt-get install -y openjdk-8-jdk openjdk-8-jre
 RUN apt-get install -y cron
 RUN apt-get install -y lib32z1 lib32z1-dev
 RUN apt-get install -y nodejs
+RUN debconf-set-selections <<< "postfix postfix/mailname string siberian.docker.local"
+RUN debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'"
+RUN apt-get install -y postfix
+
 
 RUN rm -f /etc/php/7.0/fpm/pool.d/www.conf
 COPY ./assets/php-fpm/docker.conf /etc/php/7.0/fpm/pool.d/
@@ -29,5 +33,7 @@ WORKDIR /var/www/html
 EXPOSE 9000
 
 RUN service php7.0-fpm start
+RUN service cron start
+RUN service postfix start
 
 CMD cron -f && php-fpm7.0 -F
