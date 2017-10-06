@@ -32,8 +32,6 @@ WORKDIR /var/www/html
 
 EXPOSE 9000
 
-RUN service php7.0-fpm start
-RUN service cron start
-RUN service postfix start
+COPY ./assets/php-fpm/wrapper.sh /usr/bin/wrapper.sh
 
-CMD cron -f && php-fpm7.0 -F
+CMD /usr/bin/wrapper.sh
