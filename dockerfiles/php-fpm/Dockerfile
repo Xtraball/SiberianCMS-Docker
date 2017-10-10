@@ -15,8 +15,8 @@ RUN apt-get install -y openjdk-8-jdk openjdk-8-jre
 RUN apt-get install -y cron
 RUN apt-get install -y lib32z1 lib32z1-dev
 RUN apt-get install -y nodejs
-RUN debconf-set-selections <<< "postfix postfix/mailname string siberian.docker.local"
-RUN debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'"
+RUN ["/bin/bash", "-c", "debconf-set-selections <<< 'postfix postfix/mailname string tigerappcreator.com'"]
+RUN ["/bin/bash", "-c", "debconf-set-selections <<< 'postfix postfix/main_mailer_type string \'Internet Site\''"]
 RUN apt-get install -y postfix
 
 
@@ -33,5 +33,6 @@ WORKDIR /var/www/html
 EXPOSE 9000
 
 COPY ./assets/php-fpm/wrapper.sh /usr/bin/wrapper.sh
+RUN chmod +x /usr/bin/wrapper.sh
 
 CMD /usr/bin/wrapper.sh
