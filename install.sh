@@ -2,12 +2,12 @@
 
 # Functions
 function promptconfig {
-    read -p "How much RAM would you like to dedicate to Siberian ? (in GB, default: 2): " DRAM
-    DRAM=${DRAM:-2}
-    read -p "What should be the HTTP listening port ? (default: 80): " HTTP_PORT
-    HTTP_PORT=${HTTP_PORT:-80}
-    read -p "What should be the HTTPS listening port ? (default: 443): " HTTPS_PORT
-    HTTPS_PORT=${HTTPS_PORT:-443}
+    read -p "How much RAM would you like to dedicate to Siberian Database ? (in GB, default: 1): " DB_DRAM
+    DB_DRAM=${DB_DRAM:-1}
+    read -p "What should be the HTTP listening port ? (default: 8080): " HTTP_PORT
+    HTTP_PORT=${HTTP_PORT:-8080}
+    read -p "What should be the HTTPS listening port ? (default: 8443): " HTTPS_PORT
+    HTTPS_PORT=${HTTPS_PORT:-8443}
     read -p "What range would you like to use for SocketIO ? (default: 35500-35505): " SOCKETIO_RANGE
     SOCKETIO_RANGE=${SOCKETIO_RANGE:-35500-35505}
 }
@@ -16,7 +16,7 @@ function promptconfig {
 ERASE="n"
 if [[ -f "./mysql.password" && -s "./mysql.password" ]]
 then
-    read -e -p "Your system is already initialized, would you like to erase your configuration ? [Y/n]: " ERASE
+    read -e -p "Your system is already initialized, would you like to erase/replace your configuration ? [Y/n]: " ERASE
     ERASE=${ERASE:-n}
     if [ "$ERASE" == "Y" ]
     then
@@ -56,13 +56,31 @@ then
         echo $MYSQL_PASSWORD > mysql.password
     fi
 
+    # MySQL, HTTP(S), SocketIO ports
     sed -e s/MYSQL_ROOT_PASSWORD=changeme/MYSQL_ROOT_PASSWORD=$MYSQL_PASSWORD/g \
         -e s/HTTP_PORT/$HTTP_PORT/g \
         -e s/HTTPS_PORT/$HTTPS_PORT/g \
         -e s/SOCKETIO_RANGE/$SOCKETIO_RANGE/g \
         ./docker-compose-template.yml > docker-compose.yml
 
+    # MariaDB InnoDB Pool
+    sed -e s/DB_DRAM/$DB_DRAM"G"/g \
+        ./assets/mysql/conf.d/innodb.template.cnf > ./assets/mysql/conf.d/innodb.cnf
+
 fi
 
 echo 'You can find your MySQL root password in the following file `mysql.password`'
 echo 'MySQL Password: '$MYSQL_PASSWORD
+echo ''
+echo 'Your configuration is done.'
+echo ''
+
+# Configure
+read -e -p "Would you like to start your docker containers now ? [Y/n]: " START
+START=${ERASE:-n}
+if [ "$START" == "Y" ]
+then
+    docker-compose up -d
+else
+    echo "You can start your docker with 'docker-compose up -d'"
+fi

@@ -16,7 +16,7 @@ services:
 
   php-fpm:
     restart: always
-    image: siberian_php-fpm-7.1
+    image: siberian_php-fpm-7.0
     build:
       context: .
       dockerfile: ./dockerfiles/php-fpm/Dockerfile

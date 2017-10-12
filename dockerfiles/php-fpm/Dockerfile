@@ -16,7 +16,7 @@ RUN apt-get install -y cron
 RUN apt-get install -y lib32z1 lib32z1-dev
 RUN apt-get install -y nodejs
 RUN ["/bin/bash", "-c", "debconf-set-selections <<< 'postfix postfix/mailname string tigerappcreator.com'"]
-RUN ["/bin/bash", "-c", "debconf-set-selections <<< 'postfix postfix/main_mailer_type string \'Internet Site\''"]
+RUN ["/bin/bash", "-c", "debconf-set-selections <<< 'postfix postfix/main_mailer_type string \"Internet Site\"'"]
 RUN apt-get install -y postfix
 
 

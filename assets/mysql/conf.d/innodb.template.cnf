@@ -23,6 +23,6 @@ transaction_isolation = READ-COMMITTED
 
 tmp_table_size = 128M
 
-innodb_buffer_pool_size = 5G
+innodb_buffer_pool_size = DB_DRAM
 
 innodb_thread_concurrency = 3
