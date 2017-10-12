@@ -12,6 +12,28 @@ function promptconfig {
     SOCKETIO_RANGE=${SOCKETIO_RANGE:-35500-35505}
 }
 
+# Check docker is installed
+command -v foo >/dev/null 2>&1 || { DOCKER_INSTALLED="n"; DOCKER_INSTALLED="Y"; }
+
+if [ "$DOCKER_INSTALLED" == "n" ]
+then
+    echo 'docker is required in order to create container, please install the package and retry.'
+fi
+
+# Install docker compose if needed
+if [ ! -f "/usr/local/bin/docker-compose" ]
+then
+    read -e -p "docker-compose is required in order to continue, would you like to install it ? [Y/n]: " INSTALL_DC
+    if [ "$INSTALL_DC" == "Y" ]
+    then
+        curl -L https://github.com/docker/compose/releases/download/1.16.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+        chmod +x /usr/local/bin/docker-compose
+    else
+        echo 'Aborting installation, please install docker-compose first.'
+        exit 1
+    fi
+fi
+
 # Configure
 ERASE="n"
 if [[ -f "./mysql.password" && -s "./mysql.password" ]]
