@@ -15,6 +15,7 @@ RUN apt-get install -y openjdk-8-jdk openjdk-8-jre
 RUN apt-get install -y cron
 RUN apt-get install -y lib32z1 lib32z1-dev
 RUN apt-get install -y nodejs
+RUN apt-get install -y postfix
 
 RUN rm -f /etc/php/7.0/fpm/pool.d/www.conf
 COPY ./assets/php-fpm/docker.conf /etc/php/7.0/fpm/pool.d/
@@ -28,6 +29,7 @@ WORKDIR /var/www/html
 
 EXPOSE 9000
 
-RUN service php7.0-fpm start
+COPY ./assets/php-fpm/wrapper.sh /usr/bin/wrapper.sh
+RUN chmod +x /usr/bin/wrapper.sh
 
-CMD cron -f && php-fpm7.0 -F
+CMD /usr/bin/wrapper.sh
