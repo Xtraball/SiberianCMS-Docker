@@ -4,3 +4,4 @@ mysql/*
 etc/ssl/*
 mysql.password
 assets/mysql/conf.d/innodb.cnf
+community
