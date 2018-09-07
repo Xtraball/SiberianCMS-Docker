@@ -1,7 +1,6 @@
 .idea
 .DS_Store
 mysql/*
-docker-compose.yml
 etc/ssl/*
 mysql.password
 assets/mysql/conf.d/innodb.cnf

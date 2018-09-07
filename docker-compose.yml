@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  php-fpm:
+    restart: always
+    image: php-fpm-70
+    build:
+      context: .
+      dockerfile: ./dockerfiles/php-fpm/Dockerfile
+    volumes:
+      - ./community:/var/www/html
+    networks:
+      - mariadb_master_mariadb
+
+  nginx:
+    restart: always
+    image: nginx:latest
+    ports:
+      - 20080:80
+    volumes:
+      - ./community:/var/www/html
+      - ./assets/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    links:
+      - php-fpm
+    networks:
+      - mariadb_master_mariadb
+
+networks:
+  mariadb_master_mariadb:
+    external: true
