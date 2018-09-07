@@ -1,27 +1,15 @@
 version: '3'
 
 services:
-  php-fpm:
+  apache2:
     restart: always
-    image: php-fpm-70
-    build:
-      context: .
-      dockerfile: ./dockerfiles/php-fpm/Dockerfile
-    volumes:
-      - ./community:/var/www/html
-    networks:
-      - mariadb_master_mariadb
-
-  nginx:
-    restart: always
-    image: nginx:latest
+    image: romeoz/docker-apache-php:5.6
+    entrypoint: /usr/local/bin/wrapper.sh
     ports:
       - 20080:80
     volumes:
-      - ./community:/var/www/html
-      - ./assets/nginx/default.conf:/etc/nginx/conf.d/default.conf
-    links:
-      - php-fpm
+      - ./community:/var/www/app
+      - ./assets/apache2/wrapper.sh:/usr/local/bin/wrapper.sh
     networks:
       - mariadb_master_mariadb
 
