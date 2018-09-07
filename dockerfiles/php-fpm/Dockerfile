@@ -10,6 +10,7 @@ RUN apt-get install -y curl wget
 RUN apt-get install -y apt-transport-https lsb-release ca-certificates
 RUN wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
 RUN echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list
+RUN apt-get update
 RUN apt-get install -y zip unzip vim
 RUN apt-get install -y php5.6-fpm php5.6-mysql php5.6-cli php5.6-mbstring php5.6-common php5.6-gd php5.6-mcrypt php5.6-pdo php5.6-xml php5.6-curl
 RUN apt-get install -y cron
